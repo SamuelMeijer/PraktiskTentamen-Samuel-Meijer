@@ -27,14 +27,22 @@ const sectionElements = document.querySelectorAll('main section');
 
 /* ***** API ***** */
 const url = 'https://restcountries.eu/rest/v2/all'
-// const url = 'https://restcountries.eu/rest/v2/name/denmark' //TODO: REMOVE! TESTING TIMEZONES
+// const url = 'https://restcountries.eu/rest/v2/name/denmarkddasd' //TODO: REMOVE! TESTING TIMEZONES
 
-// TODO: Add try-catch when parsing from json
 // Adding filter to only include the name, flag and timezone of the countries in the response
-fetch(`${url}?fields=name;flag;timezones`).then(response => response.json()).then(handleResponse).catch(handleError);
+fetch(`${url}?fields=name;flag;timezones`).then(handleResponse).then(handleResponseData).catch(handleError);
+
+function handleResponse (response) {
+    // Evaluating if the response was ok, throwing an error if not.
+    if (!response.ok) {
+        throw new Error(`An error occurred while fetching countries from the API: ` + response.status + ' ' + response.statusText)
+    }
+     
+    return response.json()
+}
 
 /* Response-handling */
-function handleResponse (responseData) {
+function handleResponseData (responseData) {
     // reponseData.length === 250 (0-249)
     // console.log(responseData.length);
 
@@ -63,7 +71,11 @@ function handleResponse (responseData) {
 
 /* Error-handling */
 function handleError (err) {
-    // TODO: Improve!
+    for (let i = 0; i < 3; i++) {
+        sectionElements[i].children[1].textContent = 'Sorry!';
+        sectionElements[i].children[2].textContent = 'Something went wrong :(';
+    }
+
     console.error(err.message);
 };
 
@@ -74,6 +86,7 @@ function Country (_flagUrl, _name, _timezone) {
     this.timezone = _timezone;
 }
 
+/* Prototype */
 Country.prototype.showTime = function () {
     // Getting the current time in GMT+0100
     let currentDate = new Date();
