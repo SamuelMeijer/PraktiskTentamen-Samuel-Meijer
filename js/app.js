@@ -27,7 +27,6 @@ const sectionElements = document.querySelectorAll('main section');
 
 /* ***** API ***** */
 const url = 'https://restcountries.eu/rest/v2/all'
-// const url = 'https://restcountries.eu/rest/v2/name/denmarkddasd' //TODO: REMOVE! TESTING TIMEZONES
 
 // Adding filter to only include the name, flag and timezone of the countries in the response
 fetch(`${url}?fields=name;flag;timezones`).then(handleResponse).then(handleResponseData).catch(handleError);
@@ -43,18 +42,14 @@ function handleResponse (response) {
 
 /* Response-handling */
 function handleResponseData (responseData) {
-    // reponseData.length === 250 (0-249)
-    // console.log(responseData.length);
-
-    // console.log(responseData);
+    // Creating 3 new Country-objects and adding their information to the DOM.
     for (let i = 0; i < 3; i++) {
-        //
+        // Randoming a number between 0 and the total number of countries included in the response.
         let randomNumber = Math.floor(Math.random() * responseData.length);
 
-        // TODO: FIX? If several timezones are available, the first(lowest UTC) timezone will always be used.
+        // If several timezones are available, the first(lowest UTC) timezone will always be used. 
+        // This makes some of the results seem strange, for instance Denmark and Great Britain show much lower current time than the timezone in their main territory!
         let newCountry = new Country(responseData[randomNumber].flag, responseData[randomNumber].name, responseData[randomNumber].timezones[0]);
-
-        console.log(newCountry);
 
         /* Adding the country to the DOM */
         /* Showing the flag of the country on the DOM */
@@ -71,11 +66,13 @@ function handleResponseData (responseData) {
 
 /* Error-handling */
 function handleError (err) {
+    // Letting the user know something went wrong
     for (let i = 0; i < 3; i++) {
         sectionElements[i].children[1].textContent = 'Sorry!';
         sectionElements[i].children[2].textContent = 'Something went wrong :(';
     }
 
+    // Logging the error to console
     console.error(err.message);
 };
 
@@ -92,10 +89,6 @@ Country.prototype.showTime = function () {
     let currentDate = new Date();
     // Getting the current hours in UTC
     let currentTimeUTC = currentDate.getUTCHours();
-    let currenTimeMinutes = currentDate.getMinutes();
-    // TODO: REMOVE! Used while developing
-    // console.log(currentDate);
-    // console.log(currentTimeUTC);
 
     // Defining a variable that will be used to display the current hour in the local timezone after calculating difference from UTC
     let localTimezoneHours = null;
@@ -126,13 +119,20 @@ Country.prototype.showTime = function () {
 
     // Converting the local time from type Number into type String
     let localTimezoneHoursStr = localTimezoneHours.toString();
-    // Evalutating if the string only contains one digit, adding a 0 before if it does.
+    // Evalutating if the string only contains one digit, adding a 0 before if it does
     if (localTimezoneHoursStr.length === 1) {
         localTimezoneHoursStr = `0${localTimezoneHoursStr}`;
     };
 
+    // // Converting the minutes in currentDate from type Number into type String
+    let currentTimeMinutes = currentDate.getMinutes().toString();
+    // Evalutating if the string only contains one digit, adding a 0 before if it does
+    if (currentTimeMinutes.length === 1) {
+        currentTimeMinutes = `0${currentTimeMinutes}`;
+    };
+
     // Defining a new string containing both the hours and minutes of the local timezone HH:MM
-    let currentTime = `${localTimezoneHoursStr}:${currenTimeMinutes}`;
+    let currentTime = `${localTimezoneHoursStr}:${currentTimeMinutes}`;
 
     // Returning the string
     return currentTime;
