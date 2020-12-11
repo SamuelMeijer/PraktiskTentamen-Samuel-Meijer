@@ -25,6 +25,8 @@
 
 */
 
+/* ***** ELEMENTS ***** */
+const sectionElements = document.querySelectorAll('main section');
 
 /* ***** API ***** */
 const url = 'https://restcountries.eu/rest/v2/all'
@@ -37,9 +39,19 @@ fetch(`${url}?fields=name;flag;timezones`).then(response => response.json()).the
 function handleResponse (responseData) {
     // reponseData.length === 250 (0-249)
     console.log(responseData.length);
-    console.log(responseData);
-}
 
+    // console.log(responseData);
+    for (let i = 0; i < 3; i++) {
+        let randomNumber = Math.floor(Math.random() * responseData.length);
+        // TODO: Send to country-constructor
+        console.log(responseData[randomNumber]);
+
+        /* TODO: Adding the country to the DOM */
+        /* Showing the flag on the DOM */
+        // sectionElements[i].children[0].setAttribute('src', 'URL');
+
+    }
+}
 
 /* Error-handling */
 function handleError (err) {
