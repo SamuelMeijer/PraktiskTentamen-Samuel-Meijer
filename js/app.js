@@ -60,7 +60,6 @@ function handleResponseData (responseData) {
 
         /* Showing the current time in the country on the DOM */
         sectionElements[i].children[2].textContent = newCountry.showTime();
-        // newCountry.showTime();
     }
 }
 
