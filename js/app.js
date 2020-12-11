@@ -43,9 +43,11 @@ function handleResponse (responseData) {
     // console.log(responseData);
     for (let i = 0; i < 3; i++) {
         let randomNumber = Math.floor(Math.random() * responseData.length);
-        // TODO: Send to country-constructor
-        console.log(responseData[randomNumber]);
 
+        let newCountry = new Country(responseData[randomNumber].flag, responseData[randomNumber].name, responseData[randomNumber].timezones[0]);
+
+        console.log(newCountry);
+        
         /* TODO: Adding the country to the DOM */
         /* Showing the flag on the DOM */
         // sectionElements[i].children[0].setAttribute('src', 'URL');
@@ -58,3 +60,14 @@ function handleError (err) {
     // TODO: Improve!
     console.error(err.message);
 };
+
+/* ***** COUNSTRUCTOR ***** */
+function Country (_flagUrl, _name, _timezone) {
+    this.flagUrl = _flagUrl;
+    this.name = _name;
+    this.timezone = _timezone;
+}
+
+Country.prototype.showTime = function () {
+
+}
